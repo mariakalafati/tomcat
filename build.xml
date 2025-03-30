@@ -19,6 +19,7 @@
   xmlns:if="ant:if"
   xmlns:unless="ant:unless"
   xmlns:jacoco="antlib:org.jacoco.ant"
+  xmlns:sonar="antlib:org.sonarsource.ant"
   >
 
   <!-- ===================== Initialize Property Values ==================== -->
@@ -37,10 +38,28 @@
   <property file="build.properties.release"/>
   <property file="build.properties.default"/>
 
-  <properties>
-  <sonar.organization>mariakalafati</sonar.organization>
-  <sonar.host.url>https://sonarcloud.io</sonar.host.url>
-  </properties>
+     <!-- SonarQube properties -->
+    <property name="sonar.organization" value="mariakalafati"/>
+    <property name="sonar.host.url" value="https://sonarcloud.io"/>
+
+    <!-- Other properties can go here (e.g., project key, name, etc.) -->
+    <property name="sonar.projectName" value="tomcat"/>
+
+    <!-- Define the SonarQube task -->
+    <taskdef resource="org/sonarsource/anttasks/antlib.xml" classpath="path/to/sonar-ant-task.jar"/>
+
+    <!-- Sonar scan task -->
+    <target name="sonar">
+        <sonar:sonar>
+            <sonar:properties>
+                <!-- Optional additional properties for scanning -->
+                <property name="sonar.sources" value="src"/>
+                <property name="sonar.tests" value="test"/>
+                <property name="sonar.java.binaries" value="build/classes"/>
+                <property name="sonar.java.libraries" value="lib/**/*.jar"/>
+            </sonar:properties>
+        </sonar:sonar>
+    </target>
 
   <!-- Check Ant Version -->
   <fail message="Ant version ${ant.version.required} or newer is required (${ant.version} is installed)">
