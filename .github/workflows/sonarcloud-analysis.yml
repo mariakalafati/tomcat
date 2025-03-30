@@ -1,22 +1,46 @@
-- name: Install SonarScanner
-  run: |
-    curl -o sonar-scanner.zip https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-5.0.1.3006-linux.zip
-    unzip sonar-scanner.zip
-    echo "$(pwd)/sonar-scanner-5.0.1.3006-linux/bin" >> $GITHUB_PATH
+name: SonarCloud Analysis
 
-- name: Run Ant Build
-  run: |
-    ant -noinput clean all
+on:
+  push:
+    branches:
+      - main  # Change this if you're using a different branch
+  pull_request:
+    branches:
+      - main
 
-- name: Run SonarScanner
-  env:
-    SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-  run: |
-    sonar-scanner \
-      -Dsonar.projectKey=mariakalafati_tomcat \
-      -Dsonar.organization=mariakalafati \
-      -Dsonar.host.url=https://sonarcloud.io \
-      -Dsonar.sources=src \
-      -Dsonar.language=java \
-      -Dsonar.java.binaries=output/classes
-    
+jobs:
+  sonar:
+    name: SonarCloud Analysis
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Install Java
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: Install SonarScanner
+        run: |
+          curl -o sonar-scanner.zip https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-5.0.1.3006-linux.zip
+          unzip sonar-scanner.zip
+          echo "$(pwd)/sonar-scanner-5.0.1.3006-linux/bin" >> $GITHUB_PATH
+
+      - name: Run Ant Build
+        run: |
+          ant -noinput clean all
+
+      - name: Run SonarScanner
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        run: |
+          sonar-scanner \
+            -Dsonar.projectKey=mariakalafati_tomcat \
+            -Dsonar.organization=mariakalafati \
+            -Dsonar.host.url=https://sonarcloud.io \
+            -Dsonar.sources=src \
+            -Dsonar.language=java \
+            -Dsonar.java.binaries=output/classes
