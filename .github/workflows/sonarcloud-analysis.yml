@@ -3,51 +3,38 @@ name: SonarCloud Analysis
 on:
   push:
     branches:
-      - main  # Change this if you're using a different branch
+      - main
   pull_request:
     branches:
       - main
 
 jobs:
-  sonar:
-    name: SonarCloud Analysis
+  build:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
+    - name: Checkout code
+      uses: actions/checkout@v2
 
-      - name: Install Java 21
-        uses: actions/setup-java@v3
-        with:
-          distribution: 'temurin'
-          java-version: '21'  # Update this to Java 21
+    - name: Set up JDK 21
+      uses: actions/setup-java@v2
+      with:
+        java-version: '21'
 
-      - name: Install SonarScanner
-        run: |
-          curl -o sonar-scanner.zip https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-5.0.1.3006-linux.zip
-          unzip sonar-scanner.zip
-          echo "$(pwd)/sonar-scanner-5.0.1.3006-linux/bin" >> $GITHUB_PATH
+    - name: Install Ant
+      run: sudo apt-get install ant
 
-      - name: Run Ant Build (List targets)
-        run: |
-          ant -projecthelp  # List all available targets in build.xml
+    - name: Build with Ant (Compile)
+      run: ant compile  # Use the 'compile' target to compile the project
 
-       - name: Build with Ant (Compile)
-         run: ant compile  # Use the 'compile' target to compile the project
-
-      - name: List all src directories
-        run: |
-          find . -type d -name "src"  # Find all directories named 'src' recursively
-
-      - name: Run SonarScanner
-        env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        run: |
-          sonar-scanner \
-            -Dsonar.projectKey=mariakalafati_tomcat \
-            -Dsonar.organization=mariakalafati \
-            -Dsonar.host.url=https://sonarcloud.io \
-            -Dsonar.sources=./test/webapp-virtual-webapp/src,./webapps/docs/appdev/sample/src,./modules/owb/src,./modules/jdbc-pool/src,./modules/cxf/src
-            -Dsonar.language=java \
-            -Dsonar.java.binaries=build/classes
+    - name: Run SonarScanner
+      env:
+        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+      run: |
+        sonar-scanner \
+          -Dsonar.projectKey=mariakalafati_tomcat \
+          -Dsonar.organization=mariakalafati \
+          -Dsonar.host.url=https://sonarcloud.io \
+          -Dsonar.sources=./test/webapp-virtual-webapp/src,./webapps/docs/appdev/sample/src,./modules/owb/src,./modules/jdbc-pool/src,./modules/cxf/src \
+          -Dsonar.language=java \
+          -Dsonar.java.binaries=build/classes  # Assuming that the compiled classes are in 'build/classes'
