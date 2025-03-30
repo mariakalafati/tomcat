@@ -41,8 +41,12 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: |
-         cd modules/cxf
           mvn clean verify sonar:sonar \
             -Dsonar.projectKey=mariakalafati_tomcat \
             -Dsonar.organization=mariakalafati \
             -Dsonar.host.url=https://sonarcloud.io
+            -Dsonar.modules=java,webapps,test \
+            -Dsonar.language=java \
+            -Dsonar.sources=java \
+            -Dsonar.tests=test \
+            -Dsonar.java.binaries=output/classes
