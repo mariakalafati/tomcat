@@ -37,6 +37,11 @@
   <property file="build.properties.release"/>
   <property file="build.properties.default"/>
 
+  <properties>
+  <sonar.organization>mariakalafati</sonar.organization>
+  <sonar.host.url>https://sonarcloud.io</sonar.host.url>
+  </properties>
+
   <!-- Check Ant Version -->
   <fail message="Ant version ${ant.version.required} or newer is required (${ant.version} is installed)">
     <condition>
