@@ -33,6 +33,9 @@ jobs:
         run: |
           ant -projecthelp  # List all available targets in build.xml
 
+       - name: Build with Ant (Compile)
+         run: ant compile  # Use the 'compile' target to compile the project
+
       - name: List all src directories
         run: |
           find . -type d -name "src"  # Find all directories named 'src' recursively
@@ -47,3 +50,4 @@ jobs:
             -Dsonar.host.url=https://sonarcloud.io \
             -Dsonar.sources=./test/webapp-virtual-webapp/src,./webapps/docs/appdev/sample/src,./modules/owb/src,./modules/jdbc-pool/src,./modules/cxf/src
             -Dsonar.language=java \
+            -Dsonar.java.binaries=build/classes
