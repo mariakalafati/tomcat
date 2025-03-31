@@ -22,16 +22,10 @@ jobs:
         java-version: '21'
         distribution: 'temurin'
 
-    - name: Install Dependencies
+    - name: Install Ant
       run: |
         sudo apt-get update
-        sudo apt-get install -y ant unzip
-
-    - name: Install SonarSource Build Wrapper
-      run: |
-        curl -fsSL https://binaries.sonarsource.com/Distribution/build-wrapper-linux-x86/build-wrapper-linux-x86.zip -o build-wrapper.zip
-        unzip build-wrapper.zip
-        sudo mv build-wrapper-linux-x86 /usr/local/bin/build-wrapper
+        sudo apt-get install -y ant
 
     - name: Install Node.js (for SonarScanner)
       uses: actions/setup-node@v3
@@ -41,9 +35,8 @@ jobs:
     - name: Install SonarScanner via npm
       run: npm install sonarqube-scanner
 
-    - name: Build with Ant (Compile + C/C++ Build Wrapper)
-      run: |
-        build-wrapper-linux-x86 --out-dir build_wrapper_output ant compile
+    - name: Build with Ant (Compile)
+      run: ant compile  # Use the 'compile' target to compile the project
 
     - name: Run SonarScanner
       env:
@@ -53,11 +46,9 @@ jobs:
           -Dsonar.projectKey=mariakalafati_tomcat \
           -Dsonar.organization=mariakalafati \
           -Dsonar.host.url=https://sonarcloud.io \
-          -Dsonar.sources=. \
-          -Dsonar.exclusions=**/*.c,**/*.cpp,**/*.h,**/*.hpp,**/test/**,**/docs/** \
+          -Dsonar.sources=./test/webapp-virtual-webapp/src,./webapps/docs/appdev/sample/src,./modules/owb/src,./modules/jdbc-pool/src,./modules/cxf/src \
           -Dsonar.c.file.suffixes=- \
           -Dsonar.cpp.file.suffixes=- \
           -Dsonar.objc.file.suffixes=- \
           -Dsonar.language=java \
-          -Dsonar.java.binaries=output/classes \
-          -Dsonar.cfamily.compile-commands=build_wrapper_output/compile_commands.json
+          -Dsonar.java.binaries=output/classes  # Change this if your compiled files are elsewhere
