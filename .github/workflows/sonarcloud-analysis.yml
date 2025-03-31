@@ -33,7 +33,7 @@ jobs:
         node-version: 18
 
     - name: Install SonarScanner via npm
-      run: npm install -g sonarqube-scanner
+      run: npm install sonarqube-scanner
 
     - name: Build with Ant (Compile)
       run: ant compile  # Use the 'compile' target to compile the project
@@ -42,7 +42,7 @@ jobs:
       env:
         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
       run: |
-        sonarqube-scanner \
+        npx sonarqube-scanner \
           -Dsonar.projectKey=mariakalafati_tomcat \
           -Dsonar.organization=mariakalafati \
           -Dsonar.host.url=https://sonarcloud.io \
