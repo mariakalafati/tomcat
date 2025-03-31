@@ -27,10 +27,13 @@ jobs:
         sudo apt-get update
         sudo apt-get install -y ant
 
-    - name: Install SonarScanner
-      run: |
-        sudo apt-get update
-        sudo apt-get install -y sonar-scanner
+    - name: Install Node.js (for SonarScanner)
+      uses: actions/setup-node@v3
+      with:
+        node-version: 18
+
+    - name: Install SonarScanner via npm
+      run: npm install -g sonarqube-scanner
 
     - name: Build with Ant (Compile)
       run: ant compile  # Use the 'compile' target to compile the project
@@ -39,7 +42,7 @@ jobs:
       env:
         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
       run: |
-        sonar-scanner \
+        sonarqube-scanner \
           -Dsonar.projectKey=mariakalafati_tomcat \
           -Dsonar.organization=mariakalafati \
           -Dsonar.host.url=https://sonarcloud.io \
