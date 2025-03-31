@@ -29,13 +29,8 @@ jobs:
 
     - name: Install SonarScanner
       run: |
-        sudo apt-get install -y unzip
-        wget -O sonar-scanner.zip https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-5.0.1.3006-linux.zip
-        unzip sonar-scanner.zip
-        sudo mv sonar-scanner-5.0.1.3006-linux /opt/sonar-scanner
-        echo "export PATH=$PATH:/opt/sonar-scanner/bin" >> $HOME/.bashrc
-        echo "export PATH=$PATH:/opt/sonar-scanner/bin" >> $GITHUB_ENV
-        source $HOME/.bashrc
+        sudo apt-get update
+        sudo apt-get install -y sonar-scanner
 
     - name: Build with Ant (Compile)
       run: ant compile  # Use the 'compile' target to compile the project
