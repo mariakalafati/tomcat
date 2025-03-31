@@ -36,7 +36,7 @@ jobs:
       run: npm install sonarqube-scanner
 
     - name: Build with Ant (Compile)
-      run: ant compile  # Use the 'compile' target to compile the project
+      run: ant compile  # Compile the full project
 
     - name: Run SonarScanner
       env:
@@ -46,6 +46,7 @@ jobs:
           -Dsonar.projectKey=mariakalafati_tomcat \
           -Dsonar.organization=mariakalafati \
           -Dsonar.host.url=https://sonarcloud.io \
-          -Dsonar.sources=./test/webapp-virtual-webapp/src,./webapps/docs/appdev/sample/src,./modules/owb/src,./modules/jdbc-pool/src,./modules/cxf/src \
+          -Dsonar.sources=. \
+          -Dsonar.exclusions=**/test/**,**/docs/** \
           -Dsonar.language=java \
-          -Dsonar.java.binaries=output/classes  # Change this if your compiled files are elsewhere
+          -Dsonar.java.binaries=output/classes  # Update this path if needed
