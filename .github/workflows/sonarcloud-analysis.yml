@@ -47,6 +47,6 @@ jobs:
           -Dsonar.organization=mariakalafati \
           -Dsonar.host.url=https://sonarcloud.io \
           -Dsonar.sources=. \
-          -Dsonar.exclusions=**/test/**,**/docs/** \
+          -Dsonar.exclusions= **/*.c,**/*.cpp,**/*.h,**/*.hpp,**/test/**,**/docs/** \
           -Dsonar.language=java \
           -Dsonar.java.binaries=output/classes  # Update this path if needed
