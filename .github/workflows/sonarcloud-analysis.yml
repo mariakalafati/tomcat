@@ -22,33 +22,32 @@ jobs:
         java-version: '21'
         distribution: 'temurin'
 
-    - name: Install Ant
+    - name: Install Dependencies
       run: |
         sudo apt-get update
-        sudo apt-get install -y ant
+        sudo apt-get install -y ant unzip
 
-    - name: Install Node.js (for SonarScanner)
-      uses: actions/setup-node@v3
-      with:
-        node-version: 18
-
-    - name: Install SonarScanner via npm
-      run: npm install sonarqube-scanner
+    - name: Install SonarScanner
+      run: |
+        curl -fsSL https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-5.0.1.3006-linux.zip -o sonar-scanner.zip
+        unzip sonar-scanner.zip -d /opt
+        sudo mv /opt/sonar-scanner-* /opt/sonar-scanner
+        export PATH=$PATH:/opt/sonar-scanner/bin
 
     - name: Build with Ant (Compile)
-      run: ant compile  # Compile the full project
+      run: ant compile  # Compile your Java project using Ant
 
     - name: Run SonarScanner
       env:
         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
       run: |
         sonar-scanner \
-      -Dsonar.projectKey=mariakalafati_tomcat \
-      -Dsonar.organization=mariakalafati \
-      -Dsonar.host.url=https://sonarcloud.io \
-      -Dsonar.sources=. \
-      -Dsonar.language=java \
-      -Dsonar.java.binaries=output/classes \
-      -Dsonar.c.file.suffixes=- \
-      -Dsonar.cpp.file.suffixes=- \
-      -Dsonar.objc.file.suffixes=-
+          -Dsonar.projectKey=mariakalafati_tomcat \
+          -Dsonar.organization=mariakalafati \
+          -Dsonar.host.url=https://sonarcloud.io \
+          -Dsonar.sources=. \
+          -Dsonar.language=java \
+          -Dsonar.java.binaries=output/classes \
+          -Dsonar.c.file.suffixes=- \
+          -Dsonar.cpp.file.suffixes=- \
+          -Dsonar.objc.file.suffixes=-
