@@ -42,11 +42,13 @@ jobs:
       env:
         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
       run: |
-        npx sonarqube-scanner \
-          -Dsonar.projectKey=mariakalafati_tomcat \
-          -Dsonar.organization=mariakalafati \
-          -Dsonar.host.url=https://sonarcloud.io \
-          -Dsonar.sources=. \
-          -Dsonar.exclusions= **/*.c,**/*.cpp,**/*.h,**/*.hpp,**/test/**,**/docs/** \
-          -Dsonar.language=java \
-          -Dsonar.java.binaries=output/classes  # Update this path if needed
+        sonar-scanner \
+      -Dsonar.projectKey=mariakalafati_tomcat \
+      -Dsonar.organization=mariakalafati \
+      -Dsonar.host.url=https://sonarcloud.io \
+      -Dsonar.sources=. \
+      -Dsonar.language=java \
+      -Dsonar.java.binaries=output/classes \
+      -Dsonar.c.file.suffixes=- \
+      -Dsonar.cpp.file.suffixes=- \
+      -Dsonar.objc.file.suffixes=-
