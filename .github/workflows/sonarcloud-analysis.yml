@@ -46,7 +46,7 @@ jobs:
           -Dsonar.projectKey=mariakalafati_tomcat \
           -Dsonar.organization=mariakalafati \
           -Dsonar.host.url=https://sonarcloud.io \
-          -Dsonar.sources=.
+          -Dsonar.sources=.\
           -Dsonar.c.file.suffixes=- \
           -Dsonar.cpp.file.suffixes=- \
           -Dsonar.objc.file.suffixes=- \
