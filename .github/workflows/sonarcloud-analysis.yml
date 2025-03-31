@@ -17,13 +17,15 @@ jobs:
       uses: actions/checkout@v2
 
     - name: Set up JDK 21
-      uses: actions/setup-java@v2
+      uses: actions/setup-java@v3
       with:
         java-version: '21'
-        distribution: 'adoptopenjdk'  # Specify the distribution
+        distribution: 'temurin'
 
     - name: Install Ant
-      run: sudo apt-get install ant
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y ant
 
     - name: Build with Ant (Compile)
       run: ant compile  # Use the 'compile' target to compile the project
@@ -38,4 +40,4 @@ jobs:
           -Dsonar.host.url=https://sonarcloud.io \
           -Dsonar.sources=./test/webapp-virtual-webapp/src,./webapps/docs/appdev/sample/src,./modules/owb/src,./modules/jdbc-pool/src,./modules/cxf/src \
           -Dsonar.language=java \
-          -Dsonar.java.binaries=build/classes  # Assuming that the compiled classes are in 'build/classes'
+          -Dsonar.java.binaries=output/classes  # Change this if your compiled files are elsewhere
